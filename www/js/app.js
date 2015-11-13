@@ -20,22 +20,47 @@
         // make canvas full screen
         var width = screen.availWidth;
         var height = screen.availHeight;
-        canvas.width = width;
-        canvas.height = height;
 
         // get canvas 2d context
         // With canvas 2d context, you can draw anything freely on the canvas.
         // See https://docs.webplatform.org/wiki/tutorials/canvas/canvas_tutorial
         // for tutorials of using canvas.
-        var context = canvas.getContext('2d');
-
-        // load and draw image on the canvas
-        var img = new Image();
-        img.onload = function() {
-            context.drawImage(img, (width - img.width) / 2, (height - img.height) / 2);
-        };
-        img.src = "asset/logo.png";
     }, false);
+
+
+    var paddle = $("#paddle");
+
+    if (window.DeviceOrientationEvent) {
+  //document.getElementById("doEvent").innerHTML = "DeviceOrientation";
+  // Listen for the deviceorientation event and handle the raw data
+  window.addEventListener('deviceorientation', function(eventData) {
+    // gamma is the left-to-right tilt in degrees, where right is positive
+
+
+    var tiltLR = eventData.gamma;
+
+      if (tiltLR < -8){
+          paddle.stop().animate({
+              "left": 0
+          }, 100);
+      }else if (tiltLR > 8){
+          paddle.stop().animate({
+              "left": window.innerWidth - paddle.width()
+          }, 100);
+      }else {
+          paddle.stop();
+      }
+
+    // beta is the front-to-back tilt in degrees, where front is positive
+    //var tiltFB = eventData.beta;
+
+    // alpha is the compass direction the device is facing in degrees
+    //var dir = eventData.alpha
+
+    // call our orientation event handler
+    //console.log(tiltLR + " LR, " + tiltFB + " FB, " + dir + " dir");
+  }, false);
+}
 
     function init() {
 
@@ -46,6 +71,17 @@
       watchForThrow();
       watchScores();
       watchAcceleration();
+
+      $( "#player1" ).click(function() {
+          player = "player1";
+          $(".confirmPlayer").hide();
+          $(".paddle").show();
+      });
+      $( "#player2" ).click(function() {
+          player = "player2";
+          $(".confirmPlayer").hide();
+          $(".paddle").show();
+      });
     }
 
     function throwball (yPercent, velocity) {
