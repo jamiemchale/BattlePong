@@ -40,12 +40,12 @@
           console.log("left");
           paddle.stop().animate({
               "left": 0
-          }, 1000);
+          }, 100);
       }else if (tiltLR > 0){
           console.log("right");
           paddle.stop().animate({
               "left": window.innerWidth - paddle.width()
-          }, 1000);
+          }, 100);
       }else {
           console.log("stop");
           paddle.stop();
