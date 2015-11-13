@@ -36,18 +36,15 @@
       
     var tiltLR = eventData.gamma;
       
-      if (tiltLR < 0){
-          console.log("left");
+      if (tiltLR < -8){
           paddle.stop().animate({
               "left": 0
-          }, 100);
-      }else if (tiltLR > 0){
-          console.log("right");
+          }, 1000);
+      }else if (tiltLR > 8){
           paddle.stop().animate({
               "left": window.innerWidth - paddle.width()
-          }, 100);
+          }, 1000);
       }else {
-          console.log("stop");
           paddle.stop();
       }
 
