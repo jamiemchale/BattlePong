@@ -11,8 +11,8 @@
     }
 
     var myFirebaseRef = new Firebase("https://battlepong.firebaseio.com/");
-    var myPlayerId = "player1";
-    var iHaveTheBall = true;
+    var myPlayerId = "";
+    var iHaveTheBall = false;
 
 	// Wait for DOM tree is ready for access
     document.addEventListener('DOMContentLoaded', function() {
@@ -31,34 +31,31 @@
     var paddle = $("#paddle");
 
     if (window.DeviceOrientationEvent) {
-  //document.getElementById("doEvent").innerHTML = "DeviceOrientation";
-  // Listen for the deviceorientation event and handle the raw data
-  window.addEventListener('deviceorientation', function(eventData) {
-    // gamma is the left-to-right tilt in degrees, where right is positive
+      //document.getElementById("doEvent").innerHTML = "DeviceOrientation";
+      // Listen for the deviceorientation event and handle the raw data
+      window.addEventListener('deviceorientation', function(eventData) {
+        // gamma is the left-to-right tilt in degrees, where right is positive
+        var tiltLR = eventData.gamma;
+        if (tiltLR < -8) {
+            paddle.stop().animate({
+                "left": 0
+            }, 100);
+        } else if (tiltLR > 8){
+            paddle.stop().animate({
+                "left": window.innerWidth - paddle.width()
+            }, 100);
+        } else {
+            paddle.stop();
+        }
 
+        // beta is the front-to-back tilt in degrees, where front is positive
+        //var tiltFB = eventData.beta;
 
-    var tiltLR = eventData.gamma;
+        // alpha is the compass direction the device is facing in degrees
+        //var dir = eventData.alpha
 
-      if (tiltLR < -8){
-          paddle.stop().animate({
-              "left": 0
-          }, 100);
-      }else if (tiltLR > 8){
-          paddle.stop().animate({
-              "left": window.innerWidth - paddle.width()
-          }, 100);
-      }else {
-          paddle.stop();
-      }
-
-    // beta is the front-to-back tilt in degrees, where front is positive
-    //var tiltFB = eventData.beta;
-
-    // alpha is the compass direction the device is facing in degrees
-    //var dir = eventData.alpha
-
-    // call our orientation event handler
-    //console.log(tiltLR + " LR, " + tiltFB + " FB, " + dir + " dir");
+        // call our orientation event handler
+        //console.log(tiltLR + " LR, " + tiltFB + " FB, " + dir + " dir");
   }, false);
 }
 
@@ -68,17 +65,19 @@
           'player1': { score: 0},
           'player2': { score: 0}
       });
+
       watchForThrow();
       watchScores();
       watchAcceleration();
 
       $( "#player1" ).click(function() {
-          player = "player1";
+          myPlayerId = "player1";
+          iHaveTheBall = true;
           $(".confirmPlayer").hide();
           $(".paddle").show();
       });
       $( "#player2" ).click(function() {
-          player = "player2";
+          myPlayerId = "player2";
           $(".confirmPlayer").hide();
           $(".paddle").show();
       });
@@ -128,7 +127,7 @@
         complete: true,
         caught: true,
       });
-
+      iHaveTheBall = true;
       updateScore(myPlayerId, 10);
     }
 
@@ -136,7 +135,7 @@
       myFirebaseRef.child("throws").child(throwId).update({
         complete: true
       });
-
+      iHaveTheBall = true;
       updateScore(from, 10);
     }
 
