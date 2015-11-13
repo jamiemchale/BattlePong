@@ -87,3 +87,8 @@ button {
 	width: 100%;
 	height: 50%;
 }
+#ball {
+    position: absolute;
+    bottom: 10px;
+    left: calc(50% - 25px);
+}
