@@ -3,7 +3,7 @@
  */
 /* jshint browser:true */
 (function() {
-
+    var myFirebaseRef;
 	// Wait for DOM tree is ready for access
     document.addEventListener('DOMContentLoaded', function() {
         var canvas = document.getElementById('gameScene');
@@ -26,8 +26,32 @@
         };
         img.src = "asset/logo.png";
 
-        var myFirebaseRef = new Firebase("https://battlepong.firebaseio.com/");
+        myFirebaseRef = new Firebase("https://battlepong.firebaseio.com/");
+
+        watchForRoll();
+        throwball(20, 100);
 
     }, false);
+
+    function throwball (yPercent, velocity) {
+      myFirebaseRef.child('throws').push({
+        'ypercent': yPercent,
+        'velocity': velocity,
+        'complete': true,
+        'caught': false,
+        'thrower': 'player1'
+      });
+    }
+
+    function watchForRoll () {
+      myFirebaseRef.child("throws").on("child_added", function(snapshot,  prevChildKey) {
+        if (snapshot.val().complete == false)
+          startRoll(snapshot.val());
+      });
+    }
+
+    function startRoll (snap) {
+      console.log(snap);
+    }
 
 }());
