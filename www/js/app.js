@@ -85,6 +85,7 @@
 
     function throwball (yPercent, velocity) {
       iHaveTheBall = false;
+      animateBallThrow(velocity, false);
       myFirebaseRef.child('throws').push({
         'ypercent': yPercent,
         'velocity': velocity,
@@ -118,8 +119,7 @@
     }
 
     function startRoll (id, snap) {
-      catchBall(id);
-      // missBall(id, snap.thrower);
+      animateBallThrow(snap.velocity, true);
     }
 
     function catchBall (throwId) {
