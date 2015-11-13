@@ -3,7 +3,7 @@
  */
 /* jshint browser:true */
 (function() {
-	
+
 	// Wait for DOM tree is ready for access
     document.addEventListener('DOMContentLoaded', function() {
         var canvas = document.getElementById('gameScene');
@@ -25,6 +25,9 @@
             context.drawImage(img, (width - img.width) / 2, (height - img.height) / 2);
         };
         img.src = "asset/logo.png";
+
+        var myFirebaseRef = new Firebase("https://battlepong.firebaseio.com/");
+
     }, false);
 
 }());
