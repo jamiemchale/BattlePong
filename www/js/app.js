@@ -39,11 +39,11 @@
       if (tiltLR < -8){
           paddle.stop().animate({
               "left": 0
-          }, 1000);
+          }, 100);
       }else if (tiltLR > 8){
           paddle.stop().animate({
               "left": window.innerWidth - paddle.width()
-          }, 1000);
+          }, 100);
       }else {
           paddle.stop();
       }
