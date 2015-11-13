@@ -3,6 +3,11 @@
  */
 /* jshint browser:true */
 (function() {
+    document.addEventListener("intel.xdk.device.ready", onDeviceReady, false);               
+    function onDeviceReady(){
+    // set orientation
+    intel.xdk.device.setRotateOrientation('portrait');
+}        
 
     var myFirebaseRef;
     var myPlayerId = "player1";
