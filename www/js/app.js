@@ -3,14 +3,17 @@
  */
 /* jshint browser:true */
 (function() {
-    document.addEventListener("intel.xdk.device.ready", onDeviceReady, false);               
-    function onDeviceReady(){
-    // set orientation
-    intel.xdk.device.setRotateOrientation('portrait');
-}        
+    document.addEventListener("intel.xdk.device.ready", onDeviceReady, false);
+    function onDeviceReady() {
+      // set orientation
+      intel.xdk.device.setRotateOrientation('portrait');
+      init();
+    }
 
     var myFirebaseRef = new Firebase("https://battlepong.firebaseio.com/");
     var myPlayerId = "player1";
+    var iHaveTheBall = true;
+
 	// Wait for DOM tree is ready for access
     document.addEventListener('DOMContentLoaded', function() {
         var canvas = document.getElementById('gameScene');
@@ -23,19 +26,19 @@
         // See https://docs.webplatform.org/wiki/tutorials/canvas/canvas_tutorial
         // for tutorials of using canvas.
     }, false);
-    
-    
+
+
     var paddle = $("#paddle");
-    
+
     if (window.DeviceOrientationEvent) {
   //document.getElementById("doEvent").innerHTML = "DeviceOrientation";
   // Listen for the deviceorientation event and handle the raw data
   window.addEventListener('deviceorientation', function(eventData) {
     // gamma is the left-to-right tilt in degrees, where right is positive
-      
-      
+
+
     var tiltLR = eventData.gamma;
-      
+
       if (tiltLR < -8){
           paddle.stop().animate({
               "left": 0
@@ -59,32 +62,30 @@
   }, false);
 }
 
-    $( document ).ready( function(){
-      init();
-    });
-
     function init() {
-      console.log("Unutdiofhjasuihdf");
+
       myFirebaseRef.child('players').set({
           'player1': { score: 0},
           'player2': { score: 0}
       });
       watchForThrow();
       watchScores();
-      throwball(20, 100);
-        $( "#player1" ).click(function() {
-            player = "player1";
-            $(".confirmPlayer").hide();
-            $(".paddle").show();
-        });
-        $( "#player2" ).click(function() {
-            player = "player2";
-            $(".confirmPlayer").hide();
-            $(".paddle").show();
-        });
+      watchAcceleration();
+
+      $( "#player1" ).click(function() {
+          player = "player1";
+          $(".confirmPlayer").hide();
+          $(".paddle").show();
+      });
+      $( "#player2" ).click(function() {
+          player = "player2";
+          $(".confirmPlayer").hide();
+          $(".paddle").show();
+      });
     }
 
     function throwball (yPercent, velocity) {
+      iHaveTheBall = false;
       myFirebaseRef.child('throws').push({
         'ypercent': yPercent,
         'velocity': velocity,
@@ -94,9 +95,25 @@
       });
     }
 
+    function watchAcceleration() {
+      function onSuccess(acceleration) {
+          $('#acceleration').text(Math.abs(acceleration.y));
+          if (iHaveTheBall && Math.abs(acceleration.y) > 3) {
+            throwball(20, Math.abs(acceleration.y));
+          }
+      };
+
+      function onError() {
+          alert('onError!');
+      };
+
+      var options = { frequency: 3000 };
+      var watchID = navigator.accelerometer.watchAcceleration(onSuccess, onError, options);
+    }
+
     function watchForThrow () {
       myFirebaseRef.child("throws").on("child_added", function(snapshot,  prevChildKey) {
-        if (snapshot.val().complete == false)
+        if (snapshot.val().complete == false && snapshot.val().thrower != myPlayerId)
           startRoll(snapshot.key(), snapshot.val());
       });
     }
