@@ -66,3 +66,15 @@ div {
   top:0;
   width: 100%;
 }
+
+#acceleration {
+  background: red;
+  color: #fff;
+  height:20px;
+  left:0;
+  padding: 5px;
+  position: absolute;
+  right:0;
+  top:30px;
+  width: 100%;
+}

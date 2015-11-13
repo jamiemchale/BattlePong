@@ -3,14 +3,17 @@
  */
 /* jshint browser:true */
 (function() {
-    document.addEventListener("intel.xdk.device.ready", onDeviceReady, false);               
-    function onDeviceReady(){
-    // set orientation
-    intel.xdk.device.setRotateOrientation('portrait');
-}        
+    document.addEventListener("intel.xdk.device.ready", onDeviceReady, false);
+    function onDeviceReady() {
+      // set orientation
+      intel.xdk.device.setRotateOrientation('portrait');
+      init();
+    }
 
     var myFirebaseRef = new Firebase("https://battlepong.firebaseio.com/");
     var myPlayerId = "player1";
+    var iHaveTheBall = true;
+
 	// Wait for DOM tree is ready for access
     document.addEventListener('DOMContentLoaded', function() {
         var canvas = document.getElementById('gameScene');
@@ -34,22 +37,19 @@
         img.src = "asset/logo.png";
     }, false);
 
-    $( document ).ready( function(){
-      init();
-    });
-
     function init() {
-      console.log("Unutdiofhjasuihdf");
+
       myFirebaseRef.child('players').set({
           'player1': { score: 0},
           'player2': { score: 0}
       });
       watchForThrow();
       watchScores();
-      throwball(20, 100);
+      watchAcceleration();
     }
 
     function throwball (yPercent, velocity) {
+      iHaveTheBall = false;
       myFirebaseRef.child('throws').push({
         'ypercent': yPercent,
         'velocity': velocity,
@@ -57,6 +57,22 @@
         'caught': false,
         'thrower': myPlayerId
       });
+    }
+
+    function watchAcceleration() {
+      function onSuccess(acceleration) {
+          $('#acceleration').text(Math.abs(acceleration.y));
+          if (iHaveTheBall && Math.abs(acceleration.y) > 3) {
+            throwball(20, Math.abs(acceleration.y));
+          }
+      };
+
+      function onError() {
+          alert('onError!');
+      };
+
+      var options = { frequency: 3000 };
+      var watchID = navigator.accelerometer.watchAcceleration(onSuccess, onError, options);
     }
 
     function watchForThrow () {

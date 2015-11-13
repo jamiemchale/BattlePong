@@ -5,7 +5,7 @@
       "projectTypeName": "com.intel.xdk.projecttype.jsapp",
       "src": "jsapp/template-blank-game-portrait/sample.zip",
       "projectGuid": "78444d4c-9111-42b6-a3e8-0534ab43d1a3",
-      "lastModifiedDate": 1447443599532,
+      "lastModifiedDate": 1447455661205,
       "creationDate": 1447443180377
     },
     "sourceDirectory": "www",
@@ -75,6 +75,52 @@
         "name": "Splashscreen",
         "description": "Cordova Splashscreen Plugin",
         "checksum": "170efb68"
+      },
+      {
+        "id": "intel.xdk.device",
+        "name": "Intel XDK Device",
+        "version": "1.2.5",
+        "originType": "repo",
+        "origin": "https://github.com/01org/cordova-plugin-intel-xdk-device.git",
+        "gitref": "r1.2.5",
+        "subdir": ".",
+        "paramvals": {},
+        "sourceLocation": "plugins/intel.xdk.device",
+        "selectedState": "Included",
+        "checksum": "3613045d",
+        "dependsOn": [],
+        "topLevel": true,
+        "cordovaVersion": ">=3.0.0",
+        "permissions": {
+          "android:name": [
+            "android.permission.ACCESS_WIFI_STATE",
+            "android.permission.READ_PHONE_STATE",
+            "android.permission.WAKE_LOCK",
+            "android.permission.CAMERA",
+            "android.permission.FLASHLIGHT"
+          ]
+        },
+        "description": "Intel XDK Device Plugin",
+        "data": {},
+        "dependedBy": []
+      },
+      {
+        "id": "cordova-plugin-device-motion",
+        "name": "Device Motion",
+        "version": "1.1.1",
+        "originType": "cordova.io",
+        "origin": "cordova-plugin-device-motion",
+        "gitref": "",
+        "paramvals": {},
+        "sourceLocation": "plugins/cordova-plugin-device-motion",
+        "selectedState": "Included",
+        "checksum": "132d4c05",
+        "dependsOn": [],
+        "topLevel": true,
+        "permissions": {},
+        "description": "Cordova Device Motion Plugin",
+        "data": {},
+        "dependedBy": []
       }
     ],
     "buildConfigurations": {
