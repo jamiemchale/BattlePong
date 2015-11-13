@@ -3,8 +3,13 @@
  */
 /* jshint browser:true */
 (function() {
+    document.addEventListener("intel.xdk.device.ready", onDeviceReady, false);               
+    function onDeviceReady(){
+    // set orientation
+    intel.xdk.device.setRotateOrientation('portrait');
+}        
 
-    var myFirebaseRef;
+    var myFirebaseRef = new Firebase("https://battlepong.firebaseio.com/");
     var myPlayerId = "player1";
 	// Wait for DOM tree is ready for access
     document.addEventListener('DOMContentLoaded', function() {
@@ -57,16 +62,29 @@
   }, false);
 }
 
-    init();
+    $( document ).ready( function(){
+      init();
+    });
 
     function init() {
-      myFirebaseRef = new Firebase("https://battlepong.firebaseio.com/");
+      console.log("Unutdiofhjasuihdf");
       myFirebaseRef.child('players').set({
           'player1': { score: 0},
           'player2': { score: 0}
       });
       watchForThrow();
+      watchScores();
       throwball(20, 100);
+        $( "#player1" ).click(function() {
+            player = "player1";
+            $(".confirmPlayer").hide();
+            $(".paddle").show();
+        });
+        $( "#player2" ).click(function() {
+            player = "player2";
+            $(".confirmPlayer").hide();
+            $(".paddle").show();
+        });
     }
 
     function throwball (yPercent, velocity) {
@@ -106,6 +124,16 @@
       });
 
       updateScore(from, 10);
+    }
+
+    function watchScores() {
+      myFirebaseRef.child('players/player1/score').on('value', function(snap) {
+        $('#score-player1').text(snap.val());
+      });
+
+      myFirebaseRef.child('players/player2/score').on('value', function(snap) {
+        $('#score-player2').text(snap.val());
+      });
     }
 
     function updateScore(playerId, change) {
