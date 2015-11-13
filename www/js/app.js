@@ -4,6 +4,7 @@
 /* jshint browser:true */
 (function() {
     var myFirebaseRef;
+    var myPlayerId = "player1";
 	// Wait for DOM tree is ready for access
     document.addEventListener('DOMContentLoaded', function() {
         var canvas = document.getElementById('gameScene');
@@ -25,33 +26,56 @@
             context.drawImage(img, (width - img.width) / 2, (height - img.height) / 2);
         };
         img.src = "asset/logo.png";
-
-        myFirebaseRef = new Firebase("https://battlepong.firebaseio.com/");
-
-        watchForRoll();
-        throwball(20, 100);
-
+        init();
     }, false);
+
+    function init() {
+      myFirebaseRef = new Firebase("https://battlepong.firebaseio.com/");
+      myFirebaseRef.child('players').set({
+          'player1': { score: 0},
+          'player2': { score: 0}
+      });
+      watchForThrow();
+      throwball(20, 100);
+    }
 
     function throwball (yPercent, velocity) {
       myFirebaseRef.child('throws').push({
         'ypercent': yPercent,
         'velocity': velocity,
-        'complete': true,
+        'complete': false,
         'caught': false,
-        'thrower': 'player1'
+        'thrower': myPlayerId
       });
     }
 
-    function watchForRoll () {
+    function watchForThrow () {
       myFirebaseRef.child("throws").on("child_added", function(snapshot,  prevChildKey) {
         if (snapshot.val().complete == false)
-          startRoll(snapshot.val());
+          startRoll(snapshot.key(), snapshot.val());
       });
     }
 
-    function startRoll (snap) {
-      console.log(snap);
+    function startRoll (id, snap) {
+      catchBall(id);
+    }
+
+    function catchBall (throwId) {
+      myFirebaseRef.child("throws").child(throwId).update({
+        complete: true,
+        caught: true,
+      });
+
+      var scoreRef = myFirebaseRef.child('players').child(myPlayerId).child('score');
+      scoreRef.transaction(function(currentScore) {
+        return currentScore+10;
+      });
+    }
+
+    function missBall (throwId) {
+      myFirebaseRef.child("throws").child(throwId).update({
+        complete: true
+      });
     }
 
 }());
