@@ -32,7 +32,6 @@
     init();
 
     function init() {
-      alert("init");
       myFirebaseRef = new Firebase("https://battlepong.firebaseio.com/");
       myFirebaseRef.child('players').set({
           'player1': { score: 0},
