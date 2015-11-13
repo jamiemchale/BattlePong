@@ -50,9 +50,9 @@ body {
     background-color: black;
     width: 75px;
     height: 10px;
-    position: absolute;
     bottom: 10px;
-    left: 200px;
+    left: 50%;
+    position: absolute;
 }
 #scores {
   background: black;
