@@ -39,9 +39,17 @@ input, textarea {
 }
 body {
 	/* margin: 0.5rem ; */
-	background:white;
+	background: burlywood;
 	color:black;
 }
 .align-center {
 	text-align:center;
+}
+div {
+    background-color: black;
+    width: 75px;
+    height: 10px;
+    position: absolute;
+    bottom: 10px;
+    left: 200px;
 }
