@@ -3,6 +3,7 @@
  */
 /* jshint browser:true */
 (function() {
+
     var myFirebaseRef;
     var myPlayerId = "player1";
 	// Wait for DOM tree is ready for access
@@ -26,10 +27,12 @@
             context.drawImage(img, (width - img.width) / 2, (height - img.height) / 2);
         };
         img.src = "asset/logo.png";
-        init();
     }, false);
 
+    init();
+
     function init() {
+      alert("init");
       myFirebaseRef = new Firebase("https://battlepong.firebaseio.com/");
       myFirebaseRef.child('players').set({
           'player1': { score: 0},
@@ -58,6 +61,7 @@
 
     function startRoll (id, snap) {
       catchBall(id);
+      // missBall(id, snap.thrower);
     }
 
     function catchBall (throwId) {
@@ -66,15 +70,21 @@
         caught: true,
       });
 
-      var scoreRef = myFirebaseRef.child('players').child(myPlayerId).child('score');
-      scoreRef.transaction(function(currentScore) {
-        return currentScore+10;
-      });
+      updateScore(myPlayerId, 10);
     }
 
-    function missBall (throwId) {
+    function missBall (throwId, from) {
       myFirebaseRef.child("throws").child(throwId).update({
         complete: true
+      });
+
+      updateScore(from, 10);
+    }
+
+    function updateScore(playerId, change) {
+      var scoreRef = myFirebaseRef.child('players').child(playerId).child('score');
+      scoreRef.transaction(function(currentScore) {
+        return currentScore+change;
       });
     }
 
