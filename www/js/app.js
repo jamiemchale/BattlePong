@@ -155,5 +155,27 @@
         return currentScore+change;
       });
     }
+    function animateBallThrow(acc,toPaddle) {
+       var height = $(document).height();
+
+       if(toPaddle)
+       {
+           height = "-=" + height +  "px";
+       }
+       else
+       {
+           height = "+=" + height +  "px";
+       }
+       var speed = 20000 / acc;
+       $("#ball").animate({
+           bottom: height,
+       }, speed );
+    }
+   function setBallY(ratio)
+   {
+       ratio = ratio + "%";
+       $("#ball").css({left:ratio});
+
+   }
 
 }());
