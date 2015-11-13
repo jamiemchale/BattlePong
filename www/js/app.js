@@ -3,28 +3,99 @@
  */
 /* jshint browser:true */
 (function() {
-	
+    document.addEventListener("intel.xdk.device.ready", onDeviceReady, false);               
+    function onDeviceReady(){
+    // set orientation
+    intel.xdk.device.setRotateOrientation('portrait');
+}        
+
+    var myFirebaseRef = new Firebase("https://battlepong.firebaseio.com/");
+    var myPlayerId = "player1";
 	// Wait for DOM tree is ready for access
     document.addEventListener('DOMContentLoaded', function() {
-        var canvas = document.getElementById('gameScene');
-        // make canvas full screen
-        var width = screen.availWidth;
-        var height = screen.availHeight;
-        canvas.width = width;
-        canvas.height = height;
 
-        // get canvas 2d context
-        // With canvas 2d context, you can draw anything freely on the canvas.
-        // See https://docs.webplatform.org/wiki/tutorials/canvas/canvas_tutorial
-        // for tutorials of using canvas.
-        var context = canvas.getContext('2d');
 
-        // load and draw image on the canvas
-        var img = new Image();
-        img.onload = function() {
-            context.drawImage(img, (width - img.width) / 2, (height - img.height) / 2);
-        };
-        img.src = "asset/logo.png";
     }, false);
+
+    $( document ).ready( function(){
+      init();
+    });
+
+    function init() {
+      console.log("Unutdiofhjasuihdf");
+      myFirebaseRef.child('players').set({
+          'player1': { score: 0},
+          'player2': { score: 0}
+      });
+      watchForThrow();
+      watchScores();
+      throwball(20, 100);
+        $( "#player1" ).click(function() {
+            player = "player1";
+            $(".confirmPlayer").hide();
+            $(".paddle").show();
+        });
+        $( "#player2" ).click(function() {
+            player = "player2";
+            $(".confirmPlayer").hide();
+            $(".paddle").show();
+        });
+    }
+
+    function throwball (yPercent, velocity) {
+      myFirebaseRef.child('throws').push({
+        'ypercent': yPercent,
+        'velocity': velocity,
+        'complete': false,
+        'caught': false,
+        'thrower': myPlayerId
+      });
+    }
+
+    function watchForThrow () {
+      myFirebaseRef.child("throws").on("child_added", function(snapshot,  prevChildKey) {
+        if (snapshot.val().complete == false)
+          startRoll(snapshot.key(), snapshot.val());
+      });
+    }
+
+    function startRoll (id, snap) {
+      catchBall(id);
+      // missBall(id, snap.thrower);
+    }
+
+    function catchBall (throwId) {
+      myFirebaseRef.child("throws").child(throwId).update({
+        complete: true,
+        caught: true,
+      });
+
+      updateScore(myPlayerId, 10);
+    }
+
+    function missBall (throwId, from) {
+      myFirebaseRef.child("throws").child(throwId).update({
+        complete: true
+      });
+
+      updateScore(from, 10);
+    }
+
+    function watchScores() {
+      myFirebaseRef.child('players/player1/score').on('value', function(snap) {
+        $('#score-player1').text(snap.val());
+      });
+
+      myFirebaseRef.child('players/player2/score').on('value', function(snap) {
+        $('#score-player2').text(snap.val());
+      });
+    }
+
+    function updateScore(playerId, change) {
+      var scoreRef = myFirebaseRef.child('players').child(playerId).child('score');
+      scoreRef.transaction(function(currentScore) {
+        return currentScore+change;
+      });
+    }
 
 }());
