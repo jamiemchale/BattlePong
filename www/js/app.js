@@ -77,7 +77,7 @@
 
     function watchForThrow () {
       myFirebaseRef.child("throws").on("child_added", function(snapshot,  prevChildKey) {
-        if (snapshot.val().complete == false)
+        if (snapshot.val().complete == false && snapshot.val().thrower != myPlayerId)
           startRoll(snapshot.key(), snapshot.val());
       });
     }
