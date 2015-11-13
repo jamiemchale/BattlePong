@@ -5,7 +5,7 @@
       "projectTypeName": "com.intel.xdk.projecttype.jsapp",
       "src": "jsapp/template-blank-game-portrait/sample.zip",
       "projectGuid": "78444d4c-9111-42b6-a3e8-0534ab43d1a3",
-      "lastModifiedDate": 1447443599532,
+      "lastModifiedDate": 1447456168452,
       "creationDate": 1447443180377
     },
     "sourceDirectory": "www",
