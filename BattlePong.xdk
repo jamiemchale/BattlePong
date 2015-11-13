@@ -5,7 +5,7 @@
       "projectTypeName": "com.intel.xdk.projecttype.jsapp",
       "src": "jsapp/template-blank-game-portrait/sample.zip",
       "projectGuid": "78444d4c-9111-42b6-a3e8-0534ab43d1a3",
-      "lastModifiedDate": 1447443182009,
+      "lastModifiedDate": 1447443599532,
       "creationDate": 1447443180377
     },
     "sourceDirectory": "www",
@@ -105,7 +105,7 @@
         "addlPermissions_": "",
         "excludedLibraries_": "",
         "cordovaCLIVersion_": "5.1.1",
-        "crosswalkVersion_": "14",
+        "crosswalkVersion_": "15",
         "appVersion_": "0.0.1",
         "appDescription_": "Use this template to start with a blank landscape Game",
         "appAuthor_": "Intel XDK",
