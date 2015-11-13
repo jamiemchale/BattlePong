@@ -46,11 +46,20 @@ body {
 .align-center {
 	text-align:center;
 }
-div {
+.paddle {
     background-color: black;
     width: 75px;
     height: 10px;
     position: absolute;
     bottom: 10px;
     left: 200px;
+}
+.confirmPlayer {
+	width: 100%;
+	height:100vh;
+	background-color: fuchsia;
+}
+button {
+	width: 100%;
+	height: 50%;
 }
