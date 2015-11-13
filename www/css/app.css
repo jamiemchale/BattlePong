@@ -39,8 +39,9 @@ input, textarea {
 }
 body {
 	/* margin: 0.5rem ; */
-	background: burlywood;
-	color:black;
+    background-image: url("../images/woodPanel.jpg");
+    background-size: cover;
+    
 }
 .align-center {
 	text-align:center;
