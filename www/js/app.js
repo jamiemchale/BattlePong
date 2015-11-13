@@ -13,9 +13,54 @@
     var myPlayerId = "player1";
 	// Wait for DOM tree is ready for access
     document.addEventListener('DOMContentLoaded', function() {
+        var canvas = document.getElementById('gameScene');
+        // make canvas full screen
+        var width = screen.availWidth;
+        var height = screen.availHeight;
 
-
+        // get canvas 2d context
+        // With canvas 2d context, you can draw anything freely on the canvas.
+        // See https://docs.webplatform.org/wiki/tutorials/canvas/canvas_tutorial
+        // for tutorials of using canvas.
     }, false);
+    
+    
+    var paddle = $("#paddle");
+    
+    if (window.DeviceOrientationEvent) {
+  //document.getElementById("doEvent").innerHTML = "DeviceOrientation";
+  // Listen for the deviceorientation event and handle the raw data
+  window.addEventListener('deviceorientation', function(eventData) {
+    // gamma is the left-to-right tilt in degrees, where right is positive
+      
+      
+    var tiltLR = eventData.gamma;
+      
+      if (tiltLR < 0){
+          console.log("left");
+          paddle.stop().animate({
+              "left": 0
+          }, 1000);
+      }else if (tiltLR > 0){
+          console.log("right");
+          paddle.stop().animate({
+              "left": window.innerWidth - paddle.width()
+          }, 1000);
+      }else {
+          console.log("stop");
+          paddle.stop();
+      }
+
+    // beta is the front-to-back tilt in degrees, where front is positive
+    //var tiltFB = eventData.beta;
+
+    // alpha is the compass direction the device is facing in degrees
+    //var dir = eventData.alpha
+
+    // call our orientation event handler
+    //console.log(tiltLR + " LR, " + tiltFB + " FB, " + dir + " dir");
+  }, false);
+}
 
     $( document ).ready( function(){
       init();

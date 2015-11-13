@@ -41,36 +41,16 @@ body {
 	/* margin: 0.5rem ; */
     background-image: url("../images/woodPanel.jpg");
     background-size: cover;
-
+    
 }
 .align-center {
 	text-align:center;
 }
-.paddle {
+div {
     background-color: black;
     width: 75px;
     height: 10px;
     position: absolute;
     bottom: 10px;
     left: 200px;
-}
-#scores {
-  background: black;
-  color: #fff;
-  height:20px;
-  left:0;
-  padding: 5px;
-  position: absolute;
-  right:0;
-  top:0;
-  width: 100%;
-}
-.confirmPlayer {
-	width: 100%;
-	height:100vh;
-	background-color: fuchsia;
-}
-button {
-	width: 100%;
-	height: 50%;
 }
